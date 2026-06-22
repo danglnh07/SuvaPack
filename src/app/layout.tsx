@@ -5,6 +5,7 @@ import { AppBar } from "@/components/custom/appbar";
 import { Footer } from "@/components/custom/footer";
 import { cn } from "@/lib/utils";
 import { Providers } from "@/components/providers";
+import { Analytics } from "@vercel/analytics/next";
 
 const spaceGroteskHeading = Space_Grotesk({ subsets: ['latin'], variable: '--font-heading' });
 
@@ -44,6 +45,7 @@ export default function RootLayout({
         <AppBar />
         <Providers>{children}</Providers>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
