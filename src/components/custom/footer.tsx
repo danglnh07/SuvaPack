@@ -4,7 +4,7 @@ export function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer className="w-full mt-xl bg-surface-container border-t border-secondary/20 flex flex-col items-center gap-sm p-lg text-center">
-      <h2 className="font-headline-sm text-headline-sm text-primary mb-base">SuvaPack</h2>
+      <h2 className="font-headline-sm text-headline-sm text-primary mb-base">SavaPack</h2>
       <nav className="flex flex-wrap justify-center gap-md mb-md">
         <Link
           className="font-label-sm text-on-secondary-fixed-variant hover:text-primary transition-colors"
@@ -22,7 +22,7 @@ export function Footer() {
           Contact us
         </Link>
       </nav>
-      <p className="font-label-sm text-on-secondary-fixed-variant opacity-80">&copy; {year} SuvaPack. Material Honesty.</p>
+      <p className="font-label-sm text-on-secondary-fixed-variant opacity-80">&copy; {year} SavaPack. Material Honesty.</p>
     </footer>
   );
 }
