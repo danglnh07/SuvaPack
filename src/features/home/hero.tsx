@@ -11,7 +11,7 @@ export function HeroSection() {
                 <Image
                     src="/background.png"
                     alt="Sustainable Packaging Hero"
-                    className="w-full h-full object-cover pointer-events-none select-none"
+                    className="w-full h-full object-cover pointer-events-none select-none blur"
                     loading="eager"
                     fill />
             </div>
@@ -19,7 +19,7 @@ export function HeroSection() {
                 <span className="inline-block px-md py-xs bg-secondary-container text-on-secondary-container rounded-full font-label-sm tracking-wider uppercase">
                     Material Honesty
                 </span>
-                <h2 className="font-headline-xl text-headline-xl text-primary leading-tight">
+                <h2 className="font-headline-xl text-headline-xl leading-tight">
                     Packaging that respects <br className="hidden md:block" /> the planet's pace.
                 </h2>
                 <div className="pt-base flex flex-col md:flex-row items-center justify-center gap-md">

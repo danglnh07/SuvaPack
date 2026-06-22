@@ -48,7 +48,7 @@ export default function Contact() {
                         </div>
                     </div>
                     <div className="rounded-xl overflow-hidden border border-outline-variant/20 grayscale h-60">
-                        <Image src="/map.png" alt="map" fill loading="eager" className="w-full h-full object-cover" />
+                        <Image src="/map.png" alt="map" fill sizes="auto" loading="eager" className="w-full h-full object-cover" />
                     </div>
                 </div>
             </div>

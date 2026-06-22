@@ -2,16 +2,18 @@ import { Star } from "lucide-react";
 import { Product } from "../types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 export function ProductDetail({ product }: { product: Product }) {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-xl mb-xl">
             <div className="lg:col-span-7 flex flex-col gap-base">
                 <div className="bg-surface-container-low overflow-hidden rounded-lg relative aspect-4/5 md:aspect-square">
-                    <img
+                    <Image
                         alt={product.name}
                         className="w-full h-full object-cover"
                         src={product.image}
+                        fill loading="eager" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                 </div>
             </div>
