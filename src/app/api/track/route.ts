@@ -2,15 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 async function geoLookup(ip: string) {
+  // Use ip-api.com as fallback (free, 45 req/min)
   try {
-    const res = await fetch(`https://ipapi.co/${ip}/json/`, {
-      signal: AbortSignal.timeout(5000),
+    const res = await fetch(`http://ip-api.com/json/${ip}?fields=country`, {
+      signal: AbortSignal.timeout(3000),
     });
-    if (!res.ok) return { ip, region: "" };
+    if (!res.ok) return "";
     const data = await res.json();
-    return { ip, region: data.country_name ?? data.region ?? "" };
+    return data.country ?? "";
   } catch {
-    return { ip, region: "" };
+    return "";
   }
 }
 
@@ -24,13 +25,15 @@ export async function POST(req: NextRequest) {
   const realIp = req.headers.get("x-real-ip");
   const rawIp = forwarded?.split(",")[0]?.trim() || realIp || "127.0.0.1";
 
+  // Vercel injects country directly via header — no external API needed
+  const vercelCountry = req.headers.get("x-vercel-ip-country");
+  const region = vercelCountry ?? await geoLookup(rawIp);
+
   const body = await req.json();
   const { os, browser } = body;
 
-  const { ip, region } = await geoLookup(rawIp);
-
   const { error } = await supabase.from("requests").insert({
-    ip,
+    ip: rawIp,
     os: os ?? "",
     browser: browser ?? "",
     region,
