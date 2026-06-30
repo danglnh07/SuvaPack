@@ -4,11 +4,16 @@ import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
 
 const COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
+  "#15803d",
+  "#16a34a",
+  "#0d9488",
+  "#2563eb",
+  "#8b5cf6",
+  "#d97706",
+  "#dc2626",
+  "#0891b2",
+  "#4f46e5",
+  "#be185d",
 ];
 
 const chartConfig = {
