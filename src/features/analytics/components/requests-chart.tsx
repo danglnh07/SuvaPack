@@ -5,12 +5,12 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useRequestsTimeline } from "../queries";
-import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from "recharts";
+import { Area, CartesianGrid, ComposedChart, Line, Tooltip, XAxis } from "recharts";
 
 const chartConfig = {
   count: {
     label: "Requests",
-    color: "hsl(var(--chart-1))",
+    color: "#15803d",
   },
 };
 
@@ -32,7 +32,7 @@ export function RequestsChart({ month }: { month: number }) {
         Requests This Month
       </h3>
       <ChartContainer config={chartConfig} className="w-full h-[250px]">
-        <LineChart accessibilityLayer data={data}>
+        <ComposedChart accessibilityLayer data={data} margin={{ left: 10, right: 10 }}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
             dataKey="date"
@@ -45,14 +45,26 @@ export function RequestsChart({ month }: { month: number }) {
             cursor={false}
             content={<ChartTooltipContent indicator="dot" hideLabel />}
           />
+          <defs>
+            <linearGradient id="fillCount" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--color-count)" stopOpacity={0.3} />
+              <stop offset="100%" stopColor="var(--color-count)" stopOpacity={0.05} />
+            </linearGradient>
+          </defs>
+          <Area
+            type="monotone"
+            dataKey="count"
+            fill="url(#fillCount)"
+            stroke="none"
+          />
           <Line
             type="monotone"
             dataKey="count"
             stroke="var(--color-count)"
-            strokeWidth={2}
+            strokeWidth={2.5}
             dot={false}
           />
-        </LineChart>
+        </ComposedChart>
       </ChartContainer>
     </div>
   );
