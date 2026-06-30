@@ -1,14 +1,14 @@
 import { supabase } from "@/lib/client";
 
-function getMonthRange() {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-  const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).toISOString();
-  return { start, end };
+function getMonthRange(month: number) {
+  const year = new Date().getFullYear();
+  const start = new Date(year, month, 1).toISOString();
+  const end = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
+  return { start, end, year, month };
 }
 
-export async function getTotalRequestsThisMonth(): Promise<number> {
-  const { start, end } = getMonthRange();
+export async function getTotalRequestsThisMonth(month: number): Promise<number> {
+  const { start, end } = getMonthRange(month);
 
   const { count, error } = await supabase
     .from("requests")
@@ -24,8 +24,8 @@ export async function getTotalRequestsThisMonth(): Promise<number> {
   return count ?? 0;
 }
 
-export async function getRequestsTimeline(): Promise<{ date: string; count: number }[]> {
-  const { start, end } = getMonthRange();
+export async function getRequestsTimeline(month: number): Promise<{ date: string; count: number }[]> {
+  const { start, end, year, month: m } = getMonthRange(month);
 
   const { data, error } = await supabase
     .from("requests")
@@ -44,14 +44,12 @@ export async function getRequestsTimeline(): Promise<{ date: string; count: numb
     daily[day] = (daily[day] || 0) + 1;
   }
 
-  const now = new Date();
-  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const year = now.getFullYear();
+  const daysInMonth = new Date(year, m + 1, 0).getDate();
+  const monthStr = String(m + 1).padStart(2, "0");
 
   const result: { date: string; count: number }[] = [];
   for (let d = 1; d <= daysInMonth; d++) {
-    const date = `${year}-${month}-${String(d).padStart(2, "0")}`;
+    const date = `${year}-${monthStr}-${String(d).padStart(2, "0")}`;
     result.push({ date, count: daily[date] || 0 });
   }
 
@@ -60,13 +58,15 @@ export async function getRequestsTimeline(): Promise<{ date: string; count: numb
 
 async function getGroupedCounts(
   column: "region" | "browser" | "os",
+  month: number,
 ): Promise<{ name: string; count: number }[]> {
-  const { start } = getMonthRange();
+  const { start, end } = getMonthRange(month);
 
   const { data, error } = await supabase
     .from("requests")
     .select(column)
-    .gte("created_at", start);
+    .gte("created_at", start)
+    .lte("created_at", end);
 
   if (error) {
     console.error("Supabase fetch error:", error);
@@ -84,6 +84,6 @@ async function getGroupedCounts(
     .sort((a, b) => b.count - a.count);
 }
 
-export const getRequestsByRegion = () => getGroupedCounts("region");
-export const getRequestsByBrowser = () => getGroupedCounts("browser");
-export const getRequestsByOS = () => getGroupedCounts("os");
+export const getRequestsByRegion = (month: number) => getGroupedCounts("region", month);
+export const getRequestsByBrowser = (month: number) => getGroupedCounts("browser", month);
+export const getRequestsByOS = (month: number) => getGroupedCounts("os", month);

@@ -9,49 +9,49 @@ import {
 
 export const analyticsKeys = {
   all: ["analytics"] as const,
-  total: ["analytics", "total"] as const,
-  timeline: ["analytics", "timeline"] as const,
-  region: ["analytics", "region"] as const,
-  browser: ["analytics", "browser"] as const,
-  os: ["analytics", "os"] as const,
+  total: (month: number) => ["analytics", "total", month] as const,
+  timeline: (month: number) => ["analytics", "timeline", month] as const,
+  region: (month: number) => ["analytics", "region", month] as const,
+  browser: (month: number) => ["analytics", "browser", month] as const,
+  os: (month: number) => ["analytics", "os", month] as const,
 };
 
-export function useTotalRequestsThisMonth() {
+export function useTotalRequestsThisMonth(month: number) {
   return useQuery({
-    queryKey: analyticsKeys.total,
-    queryFn: getTotalRequestsThisMonth,
+    queryKey: analyticsKeys.total(month),
+    queryFn: () => getTotalRequestsThisMonth(month),
     refetchInterval: 60_000,
   });
 }
 
-export function useRequestsTimeline() {
+export function useRequestsTimeline(month: number) {
   return useQuery({
-    queryKey: analyticsKeys.timeline,
-    queryFn: getRequestsTimeline,
+    queryKey: analyticsKeys.timeline(month),
+    queryFn: () => getRequestsTimeline(month),
     refetchInterval: 60_000,
   });
 }
 
-export function useRequestsByRegion() {
+export function useRequestsByRegion(month: number) {
   return useQuery({
-    queryKey: analyticsKeys.region,
-    queryFn: getRequestsByRegion,
+    queryKey: analyticsKeys.region(month),
+    queryFn: () => getRequestsByRegion(month),
     refetchInterval: 60_000,
   });
 }
 
-export function useRequestsByBrowser() {
+export function useRequestsByBrowser(month: number) {
   return useQuery({
-    queryKey: analyticsKeys.browser,
-    queryFn: getRequestsByBrowser,
+    queryKey: analyticsKeys.browser(month),
+    queryFn: () => getRequestsByBrowser(month),
     refetchInterval: 60_000,
   });
 }
 
-export function useRequestsByOS() {
+export function useRequestsByOS(month: number) {
   return useQuery({
-    queryKey: analyticsKeys.os,
-    queryFn: getRequestsByOS,
+    queryKey: analyticsKeys.os(month),
+    queryFn: () => getRequestsByOS(month),
     refetchInterval: 60_000,
   });
 }

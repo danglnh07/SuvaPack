@@ -1,6 +1,7 @@
 "use client";
 
 import { useRequestsByRegion, useRequestsByBrowser, useRequestsByOS } from "../queries";
+import { PieChartCard } from "./browser-pie-chart";
 
 function GroupTable({
   title,
@@ -48,16 +49,16 @@ function GroupTable({
   );
 }
 
-export function GroupStats() {
-  const { data: regionData = [], isLoading: regionLoading } = useRequestsByRegion();
-  const { data: browserData = [], isLoading: browserLoading } = useRequestsByBrowser();
-  const { data: osData = [], isLoading: osLoading } = useRequestsByOS();
+export function GroupStats({ month }: { month: number }) {
+  const { data: regionData = [], isLoading: regionLoading } = useRequestsByRegion(month);
+  const { data: browserData = [], isLoading: browserLoading } = useRequestsByBrowser(month);
+  const { data: osData = [], isLoading: osLoading } = useRequestsByOS(month);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <GroupTable title="By Region" data={regionData} isLoading={regionLoading} />
-      <GroupTable title="By Browser" data={browserData} isLoading={browserLoading} />
-      <GroupTable title="By OS" data={osData} isLoading={osLoading} />
+      <PieChartCard title="By Browser" data={browserData} isLoading={browserLoading} />
+      <PieChartCard title="By OS" data={osData} isLoading={osLoading} />
     </div>
   );
 }
