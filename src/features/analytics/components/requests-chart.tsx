@@ -5,7 +5,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useRequestsTimeline } from "../queries";
-import { Bar, BarChart, CartesianGrid, XAxis, Tooltip } from "recharts";
+import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from "recharts";
 
 const chartConfig = {
   count: {
@@ -14,8 +14,8 @@ const chartConfig = {
   },
 };
 
-export function RequestsChart() {
-  const { data = [], isLoading } = useRequestsTimeline();
+export function RequestsChart({ month }: { month: number }) {
+  const { data = [], isLoading } = useRequestsTimeline(month);
 
   if (isLoading) {
     return (
@@ -32,7 +32,7 @@ export function RequestsChart() {
         Requests This Month
       </h3>
       <ChartContainer config={chartConfig} className="w-full h-[250px]">
-        <BarChart accessibilityLayer data={data}>
+        <LineChart accessibilityLayer data={data}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
             dataKey="date"
@@ -45,12 +45,14 @@ export function RequestsChart() {
             cursor={false}
             content={<ChartTooltipContent indicator="dot" hideLabel />}
           />
-          <Bar
+          <Line
+            type="monotone"
             dataKey="count"
-            fill="var(--color-count)"
-            radius={[4, 4, 0, 0]}
+            stroke="var(--color-count)"
+            strokeWidth={2}
+            dot={false}
           />
-        </BarChart>
+        </LineChart>
       </ChartContainer>
     </div>
   );
